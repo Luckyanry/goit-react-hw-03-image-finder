@@ -12,20 +12,31 @@ class App extends Component {
     gallery: [],
     loader: true,
     error: false,
+    text: "",
     currentPage: 1,
     perPage: 12,
     totalItemCount: 1000,
+    showModal: false,
+  };
+
+  toggleModal = () => {
+    this.setState((state) => ({
+      showModal: !state.showModal,
+    }));
   };
 
   render() {
-    const {} = this.state;
+    const { loader, error, text, showModal } = this.state;
     return (
       <div className="App">
         <Searchbar />
+        {error && (
+          <h2 className="error">Whoops, something went wrong: {text}</h2>
+        )}
+        {loader && <Loader />}
+        {showModal && <Modal onClose={this.toggleModal} />}
         <ImageGallery />
-        <Loader />
         <Button />
-        <Modal />
       </div>
     );
   }
