@@ -1,9 +1,9 @@
 import React from "react";
 import "./SearchForm.css";
 
-const SearchForm = ({ searchQuery, handleSubmit, inputSearch }) => {
+const SearchForm = ({ searchQuery, formSubmit, inputSearch }) => {
   return (
-    <form className="SearchForm" onSubmit={handleSubmit}>
+    <form className="SearchForm" onSubmit={formSubmit}>
       <button type="submit" className="SearchForm-button">
         <span className="SearchForm-button-label">Search</span>
       </button>
@@ -11,8 +11,8 @@ const SearchForm = ({ searchQuery, handleSubmit, inputSearch }) => {
       <input
         className="SearchForm-input"
         type="text"
-        autocomplete="off"
-        autofocus
+        autoComplete="off"
+        autoFocus
         placeholder="Search images and photos"
         name="query"
         value={searchQuery}

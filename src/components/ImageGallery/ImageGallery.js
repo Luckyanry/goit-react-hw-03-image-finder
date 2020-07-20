@@ -13,3 +13,5 @@ const ImageGallery = ({ gallery, showModal }) => {
 };
 
 export default ImageGallery;
+
+//  <ImageGalleryItem {...item} showModal={showModal} key={item.id} />
