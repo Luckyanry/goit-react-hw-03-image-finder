@@ -1,72 +1,27 @@
-import React, { Component } from "react";
-// import SearchForm from "../SearchForm/SearchForm";
+import React from "react";
 import "./Searchbar.css";
 
-class Searchbar extends Component {
-  //   state = {
-  //     query: "",
-  //   };
+const Searchbar = ({ query, addQuery, getImages }) => {
+  return (
+    <header className="Searchbar">
+      <form className="SearchForm" onSubmit={getImages} data-action="search">
+        <button type="submit" className="SearchForm-button">
+          <span className="SearchForm-button-label">Search</span>
+        </button>
 
-  //   inputSearch = ({ target }) => {
-  //     const { value } = target;
-  //     this.props.addQuery(value);
-  //   };
-
-  //   inputSearch = ({ target }) => {
-  //     const { value, name } = target;
-
-  //     this.setState({
-  //       [name]: value,
-  //     });
-
-  //     // this.props.addQuery(value);
-  //   };
-
-  //   formSubmit = (e) => {
-  //     const { query } = this.state;
-  //     // const { loaderToggle, errorToggle, updateUsers } = this.props;
-  //     e.preventDefault();
-
-  //     this.props.addQuery(query);
-  //   };
-
-  render() {
-    const { query } = this.props;
-    // const { query } = this.state;
-    return (
-      <header className="Searchbar">
-        {/* <SearchForm
-          searchQuery={query}
-          formSubmit={this.formSubmit}
-          inputSearch={this.inputSearch}
-        /> */}
-        {/* <form className="SearchForm" onSubmit={this.formSubmit}> */}
-        {/* <form className="SearchForm" onSubmit={this.props.getImages}> */}
-        <form
-          className="SearchForm"
-          onSubmit={this.props.getImages}
-          data-action="search"
-        >
-          <button type="submit" className="SearchForm-button">
-            <span className="SearchForm-button-label">Search</span>
-          </button>
-
-          <input
-            className="SearchForm-input"
-            type="text"
-            autoComplete="off"
-            autoFocus
-            placeholder="Search images and photos"
-            name="query"
-            // value={query}
-            value={query}
-            onChange={this.props.addQuery}
-            // onChange={this.inputSearch}
-          />
-        </form>
-      </header>
-    );
-  }
-}
+        <input
+          className="SearchForm-input"
+          type="text"
+          autoComplete="off"
+          autoFocus
+          placeholder="Search images and photos"
+          name="query"
+          value={query}
+          onChange={addQuery}
+        />
+      </form>
+    </header>
+  );
+};
 
 export default Searchbar;

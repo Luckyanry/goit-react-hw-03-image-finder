@@ -3,12 +3,7 @@ import "./ImageGallery.css";
 import ImageGalleryItem from "../ImageGalleryItem/ImageGalleryItem";
 import Button from "../Button/Button";
 
-const ImageGallery = ({
-  gallery,
-  showModal,
-  loadMoreBtn = null,
-  loadImages,
-}) => {
+const ImageGallery = ({ gallery, showModal, loadImages }) => {
   return (
     <>
       <ul className="ImageGallery">
@@ -16,7 +11,6 @@ const ImageGallery = ({
           <ImageGalleryItem key={item.id} {...item} showModal={showModal} />
         ))}
       </ul>
-      {/* {gallery.length > 0 && <Button requestOnBtn={loadMoreBtn} />} */}
       {gallery.length > 0 && <Button requestOnBtn={loadImages} />}
     </>
   );
