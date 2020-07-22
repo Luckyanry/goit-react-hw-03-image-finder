@@ -16,8 +16,8 @@ const ImageGallery = ({
           <ImageGalleryItem key={item.id} {...item} showModal={showModal} />
         ))}
       </ul>
-      {gallery.length > 0 && <Button requestOnBtn={loadMoreBtn} />}
-      {/* {gallery.length > 0 && <Button requestOnBtn={loadImages} />} */}
+      {/* {gallery.length > 0 && <Button requestOnBtn={loadMoreBtn} />} */}
+      {gallery.length > 0 && <Button requestOnBtn={loadImages} />}
     </>
   );
 };

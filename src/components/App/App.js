@@ -11,12 +11,14 @@ class App extends Component {
   state = {
     gallery: [],
     query: "",
-    loader: true,
+    loader: false,
     error: false,
     message: "",
     currentPage: 1,
     perPage: 12,
     showModal: false,
+    tags: "",
+    largeImageURL: "",
   };
 
   // componentDidMount() {
@@ -24,29 +26,32 @@ class App extends Component {
   //   this.refreshSearchQuery(query);
   // }
 
-  componentDidUpdate(prevProps, prevState) {
-    const { currentPage, query } = this.state;
-    const oldPage = prevState.currentPage;
-    const oldQuery = prevState.query;
+  // componentDidUpdate(prevProps, prevState) {
+  //   const { currentPage, query } = this.state;
+  //   const oldPage = prevState.currentPage;
+  //   const oldQuery = prevState.query;
 
-    if (currentPage !== oldPage || query !== oldQuery) {
-      this.refreshSearchQuery(query);
-    }
-  }
+  //   if (currentPage !== oldPage) {
+  //     this.refreshSearchQuery();
+  //   }
 
-  refreshSearchQuery = async (query = "") => {
-    const { currentPage, perPage } = this.state;
-    const URL = createGalleryUrl(query, currentPage, perPage);
+  //   if (query !== oldQuery) {
+  //     this.refreshSearchQuery();
+  //   }
+  // }
+
+  refreshSearchQuery = async (...rest) => {
+    const URL = createGalleryUrl(...rest);
 
     try {
+      await this.loaderToggle(true);
       const result = await request("get", URL);
-      this.updateGallery(result);
-
-      // await this.loaderToggle(true);
       await this.errorToggle(false);
+      return result;
     } catch (error) {
-      // const message = error.message;
       this.errorToggle(true);
+      const message = error.message;
+      return message;
     } finally {
       this.loaderToggle(false);
     }
@@ -55,52 +60,104 @@ class App extends Component {
   // getImages = async (e) => {
   //   e.preventDefault();
   //   const { query } = this.state;
-  //   const URL = createGalleryUrl(query);
-
-  //   const result = await request("get", URL);
+  //   const result = await this.refreshSearchQuery(query);
   //   console.log("result", result);
+
+  //   if (result.constructor.name !== "String") {
+  //     this.setState({
+  //       gallery: [...result.hits],
+  //       currentPage: 2,
+  //     });
+  //   } else {
+  //     this.setState({
+  //       message: result,
+  //     });
+  //   }
+  // };
+
+  getResult = async (e) => {
+    e.preventDefault();
+    e.persist();
+    console.dir(e.target);
+    const { query, currentPage, perPage } = this.state;
+
+    const result = e.target.dataset.action
+      ? await this.refreshSearchQuery(query, currentPage, perPage)
+      : await this.refreshSearchQuery(query);
+
+    if (result.constructor.name !== "String") {
+      e.target.dataset.action
+        ? this.setState((prev) => ({
+            gallery: [...prev.gallery, ...result.hits],
+            currentPage: prev.currentPage + 1,
+          }))
+        : this.setState({
+            gallery: [...result.hits],
+            currentPage: 2,
+          });
+    } else {
+      this.setState({
+        message: result,
+      });
+    }
+  };
+
+  // loadImages = async () => {
+  //   const { query, currentPage, perPage } = this.state;
+  //   const result = await this.refreshSearchQuery(query, currentPage, perPage);
+
+  //   if (result.constructor.name !== "String") {
+  //     this.setState((prev) => ({
+  //       gallery: [...prev.gallery, ...result.hits],
+  //       currentPage: prev.currentPage + 1,
+  //     }));
+  //   } else {
+  //     this.setState({
+  //       message: result,
+  //     });
+  //   }
+  // };
+
+  addQuery = ({ target: { name, value } }) => {
+    this.setState({
+      [name]: value,
+    });
+  };
+
+  // updateGallery = (result) => {
   //   this.setState({
-  //     gallery: [...result.hits],
+  //     gallery: result.hits,
   //     currentPage: 2,
   //   });
   // };
 
-  // loadImages = async () => {
-  //   const { query, currentPage, perPage } = this.state;
-  //   const URL = createGalleryUrl(query, currentPage, perPage);
-
-  //   const result = await request("get", URL);
-  //   this.setState((prev) => ({
-  //     gallery: [...prev.gallery, ...result.hits],
-  //     currentPage: prev.currentPage + 1,
-  //   }));
-  // };
-
-  // addQuery = ({ target: { name, value } }) => {
+  // addQuery = (value) => {
   //   this.setState({
-  //     [name]: value,
+  //     query: value,
   //   });
   // };
 
-  addQuery = (value) => {
-    this.setState({
-      query: value,
-    });
-  };
+  // loadMoreBtn = (e) => {
+  //   e.preventDefault();
 
-  updateGallery = (result) => {
-    this.setState({
-      gallery: result.hits,
-    });
-  };
+  //   const { gallery, currentPage } = this.state;
 
-  loadMoreBtn = () => {
-    const { gallery } = this.state;
-    this.setState((prev) => ({
-      gallery: [...prev.gallery, ...gallery],
-      currentPage: prev.currentPage + 1,
-    }));
-  };
+  //   this.setState((prev) => {
+  //     console.log("prev.gallery", prev.gallery);
+  //     console.log("gallery", gallery);
+  //     console.log("currentPage", currentPage + 1);
+  //     console.log("prev.currentPage", prev.currentPage + 1);
+  //     // ({
+  //     //   gallery: [...prev.gallery, ...gallery],
+  //     //   currentPage: prev.currentPage + 1,
+  //     // });
+  //   });
+
+  // this.setState((prev) => ({
+  //   gallery: [...prev.gallery, ...gallery],
+  //   currentPage: prev.currentPage + 1,
+  // }));
+  // };
 
   loaderToggle = (status) => {
     this.setState({
@@ -114,31 +171,51 @@ class App extends Component {
     });
   };
 
-  toggleModal = () => {
+  toggleModal = (largeImageURL, tags) => {
     this.setState((state) => ({
       showModal: !state.showModal,
+      largeImageURL,
+      tags,
     }));
   };
 
   render() {
-    const { loader, error, message, showModal, gallery, query } = this.state;
+    const {
+      loader,
+      error,
+      message,
+      showModal,
+      gallery,
+      query,
+      largeImageURL,
+      tags,
+    } = this.state;
     return (
       <div className="App">
-        {loader && <Spinner />}
         <Searchbar
           addQuery={this.addQuery}
           query={query}
-          getImages={this.getImages}
+          // getImages={this.getImages}
+          getImages={this.getResult}
         />
+        <ImageGallery
+          gallery={gallery}
+          // loadMoreBtn={this.loadMoreBtn}
+          // loadImages={this.loadImages}
+          loadImages={this.getResult}
+          showModal={this.toggleModal}
+        />
+        {loader && <Spinner />}
         {error && (
           <h2 className="error">Whoops, something went wrong: {message}</h2>
         )}
-        {showModal && <Modal onClose={this.toggleModal} />}
-        <ImageGallery
-          gallery={gallery}
-          loadMoreBtn={this.loadMoreBtn}
-          // loadImages={this.loadImages}
-        />
+        {showModal && (
+          <Modal
+            onClose={this.toggleModal}
+            largeImageURL={largeImageURL}
+            tags={tags}
+          />
+        )}
       </div>
     );
   }

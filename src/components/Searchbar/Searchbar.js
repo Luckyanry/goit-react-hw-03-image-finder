@@ -3,43 +3,36 @@ import React, { Component } from "react";
 import "./Searchbar.css";
 
 class Searchbar extends Component {
-  state = {
-    query: "",
-  };
+  //   state = {
+  //     query: "",
+  //   };
 
   //   inputSearch = ({ target }) => {
   //     const { value } = target;
   //     this.props.addQuery(value);
   //   };
 
-  inputSearch = ({ target }) => {
-    const { value, name } = target;
+  //   inputSearch = ({ target }) => {
+  //     const { value, name } = target;
 
-    this.setState({
-      [name]: value,
-    });
+  //     this.setState({
+  //       [name]: value,
+  //     });
 
-    // this.props.addQuery(value);
-  };
+  //     // this.props.addQuery(value);
+  //   };
 
-  formSubmit = (e) => {
-    const { query } = this.state;
-    // const { loaderToggle, errorToggle, updateUsers } = this.props;
-    e.preventDefault();
+  //   formSubmit = (e) => {
+  //     const { query } = this.state;
+  //     // const { loaderToggle, errorToggle, updateUsers } = this.props;
+  //     e.preventDefault();
 
-    this.props.addQuery(query);
-    // this.reset();
-  };
-
-  reset = () => {
-    this.setState({
-      query: "",
-    });
-  };
+  //     this.props.addQuery(query);
+  //   };
 
   render() {
-    // const { query } = this.props;
-    const { query } = this.state;
+    const { query } = this.props;
+    // const { query } = this.state;
     return (
       <header className="Searchbar">
         {/* <SearchForm
@@ -47,8 +40,13 @@ class Searchbar extends Component {
           formSubmit={this.formSubmit}
           inputSearch={this.inputSearch}
         /> */}
-        <form className="SearchForm" onSubmit={this.formSubmit}>
-          {/* <form className="SearchForm" onSubmit={this.props.getImages}> */}
+        {/* <form className="SearchForm" onSubmit={this.formSubmit}> */}
+        {/* <form className="SearchForm" onSubmit={this.props.getImages}> */}
+        <form
+          className="SearchForm"
+          onSubmit={this.props.getImages}
+          data-action="search"
+        >
           <button type="submit" className="SearchForm-button">
             <span className="SearchForm-button-label">Search</span>
           </button>
@@ -60,9 +58,10 @@ class Searchbar extends Component {
             autoFocus
             placeholder="Search images and photos"
             name="query"
+            // value={query}
             value={query}
-            // onChange={this.props.addQuery}
-            onChange={this.inputSearch}
+            onChange={this.props.addQuery}
+            // onChange={this.inputSearch}
           />
         </form>
       </header>

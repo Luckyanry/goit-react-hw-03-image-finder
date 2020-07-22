@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const createGalleryUrl = (query, currentPage = 1, perPage = 12) => {
+export const createGalleryUrl = (query, currentPage, perPage = 12) => {
   return withCredentials(
     `https://pixabay.com/api/?q=${query}&page=${currentPage}&image_type=photo&orientation=horizontal&per_page=${perPage}&`
   );

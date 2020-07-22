@@ -4,11 +4,12 @@ import "./Modal.css";
 class Modal extends Component {
   componentDidMount() {
     window.addEventListener("keydown", this.handleKeyDown);
-    document.addEventListener("click", this.handleClickOnOverlay);
+    // document.addEventListener("click", this.handleClickOnOverlay);
   }
+
   componentWillUnmount() {
     window.removeEventListener("keydown", this.handleKeyDown);
-    document.removeEventListener("click", this.handleClickOnOverlay);
+    // document.removeEventListener("click", this.handleClickOnOverlay);
   }
 
   handleKeyDown = (e) => {
@@ -23,7 +24,7 @@ class Modal extends Component {
   render() {
     const { largeImageURL, tags } = this.props;
     return (
-      <div className="Overlay">
+      <div className="Overlay" onClick={this.handleClickOnOverlay}>
         <div className="Modal">
           <img src={largeImageURL} alt={tags} />
         </div>
