@@ -17,7 +17,6 @@ class Modal extends Component {
 
   handleClickOnOverlay = (e) => {
     // if (e.target.nodeName === "IMG") return;
-
     e.target.nodeName === "DIV" && this.props.onClose();
   };
 

@@ -1,17 +1,25 @@
 import React from "react";
 import "./ImageGallery.css";
 import ImageGalleryItem from "../ImageGalleryItem/ImageGalleryItem";
+import Button from "../Button/Button";
 
-const ImageGallery = ({ gallery, showModal }) => {
+const ImageGallery = ({
+  gallery,
+  showModal,
+  loadMoreBtn = null,
+  loadImages,
+}) => {
   return (
-    <ul className="ImageGallery">
-      {gallery.map((item) => (
-        <ImageGalleryItem {...item} showModal={showModal} key={item.id} />
-      ))}
-    </ul>
+    <>
+      <ul className="ImageGallery">
+        {gallery.map((item) => (
+          <ImageGalleryItem key={item.id} {...item} showModal={showModal} />
+        ))}
+      </ul>
+      {gallery.length > 0 && <Button requestOnBtn={loadMoreBtn} />}
+      {/* {gallery.length > 0 && <Button requestOnBtn={loadImages} />} */}
+    </>
   );
 };
 
 export default ImageGallery;
-
-//  <ImageGalleryItem {...item} showModal={showModal} key={item.id} />

@@ -3,10 +3,11 @@ import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import "./Loader.css";
 
-const Loader = () => {
+const Spinner = () => {
   return (
     <Loader
-      type="Puff"
+      className="Loader"
+      type="ThreeDots"
       color="#00BFFF"
       height={100}
       width={100}
@@ -15,4 +16,4 @@ const Loader = () => {
   );
 };
 
-export default Loader;
+export default Spinner;
